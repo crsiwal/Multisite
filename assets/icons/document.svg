@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.3 (57544) - http://www.bohemiancoding.com/sketch -->
+    <title>document (2)</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Top-nav" transform="translate(-980.000000, -24.000000)" fill="#EF4564">
+            <g id="Group-15" transform="translate(980.000000, 24.000000)">
+                <g id="document-(2)">
+                    <path d="M10.99978,0 C4.92477333,0 0,4.92477333 0,10.99978 C0,17.0747867 4.92477333,21.99956 10.99978,21.99956 C17.0747867,21.99956 21.99956,17.0747867 21.99956,10.99978 C21.99956,4.92477333 17.07486,0 10.99978,0 Z M16.1426676,15.0951952 L16.1426676,16.4316952 C16.1426676,17.1698686 15.544341,17.7681952 14.8065343,17.7681952 L7.62221429,17.7681952 C6.88404095,17.7681952 6.28571429,17.1698686 6.28571429,16.4316952 L6.28571429,6.57459524 C6.28571429,5.8364219 6.88389429,5.23809524 7.62221429,5.23809524 L14.806461,5.23809524 C15.5446343,5.23809524 16.1428143,5.8364219 16.1425943,6.57481524 C16.1426676,6.57481524 16.1426676,7.91109524 16.1426676,7.91109524 L16.1426676,15.0951952 Z" id="Shape" fill-rule="nonzero"></path>
+                    <g id="Group-6" transform="translate(7.333333, 8.380952)">
+                        <rect id="Rectangle" x="0.149359048" y="2.0952381" width="7.33333333" height="1.04761905"></rect>
+                        <rect id="Rectangle" x="0.149359048" y="0" width="7.33333333" height="1.04761905"></rect>
+                        <rect id="Rectangle" x="0.149359048" y="4.19047619" width="7.33333333" height="1.04761905"></rect>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

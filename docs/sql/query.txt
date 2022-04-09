@@ -1,0 +1,336 @@
+CREATE DATABASE kyowal CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE kyowal;
+
+CREATE TABLE kdb_users (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Unique user id',
+    gid VARCHAR(32) DEFAULT '' COMMENT 'Google user id',
+    first_name varchar(32) NOT NULL COMMENT 'User First Name',
+    middle_name varchar(32) NOT NULL COMMENT 'User Middle Name',
+    last_name varchar(32) NOT NULL COMMENT 'User Ser Name',
+    display_name varchar(128) NOT NULL DEFAULT "" COMMENT 'Full name of user publicly available',
+    email VARCHAR(64) NOT NULL COMMENT 'User Email Address',
+    email_v BOOLEAN NOT NULL DEFAULT FALSE COMMENT 'Is user email address verified.',
+    username VARCHAR(64) NOT NULL COMMENT 'User account Username',
+    password VARCHAR(64) NOT NULL COMMENT 'User account Password',
+    reset INT UNSIGNED DEFAULT 0 COMMENT 'How much time password changed',
+    pic_url VARCHAR(256) NOT NULL DEFAULT '' COMMENT 'image url of user',
+    user_role INT(4) UNSIGNED NOT NULL COMMENT 'User Role eg: 0->Super User, 1-> Moderator',
+    state INT UNSIGNED DEFAULT 0 COMMENT 'Status of user account. eg: 0->pending, 1->Active, 2-> deactive, 3-> Spam, 4-> Blocked, 5-> Delete',
+    reg_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'when user registered',
+    last_active DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'When user active',
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE kdb_system_config (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Unique id',
+    blog_id BIGINT UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Blog id key: kdb_blogs->id',
+    user_id BIGINT UNSIGNED NOT NULL DEFAULT 0 COMMENT 'For which user this setting saved',
+    setting VARCHAR(64) NOT NULL COMMENT 'Fixed name of setting in config',
+    value TEXT NOT NULL COMMENT 'Multiple format will be saved like Integer, Float, String etc',
+    update_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'When this setting updated',
+    PRIMARY KEY (id)
+);
+
+insert into kdb_system_config values (NULL, 0, 0, '_db_config_default_user_role', 2, now());
+
+CREATE TABLE kdb_access_token (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Unique id',
+    user_id BIGINT UNSIGNED NOT NULL COMMENT 'User who have google access',
+    access_token TEXT COMMENT 'This is access token used for create article',
+    refresh_token VARCHAR(512) DEFAULT NULL COMMENT 'This is used for update access token',
+    valid_access BOOLEAN NOT NULL DEFAULT FALSE COMMENT 'TRUE/FALSE',
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE kdb_blogs (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Unique blog id',
+    name VARCHAR(128) NOT NULL COMMENT 'Blog Name',
+    username VARCHAR(64) NOT NULL COMMENT 'Unique Blog Username',
+    user_id BIGINT UNSIGNED NOT NULL COMMENT 'User who have google access',
+    category INT UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Blog category id',
+    logo_url VARCHAR(128) NOT NULL DEFAULT '' COMMENT 'Blog logo url eg: sitelogo.png',
+    metadesc VARCHAR(256) NOT NULL DEFAULT '' COMMENT 'Blog short description',
+    status INT UNSIGNED DEFAULT 1 COMMENT 'Status of blog account. eg: 0->pending, 1->Active, 2-> deactive, 3-> Spam, 4-> Blocked, 5-> Delete',
+    create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Time when this website added in database',
+    update_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Time when this website details updated',
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE kdb_posts (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Unique post id',
+    blog_id BIGINT UNSIGNED NOT NULL COMMENT 'Blog id key: kdb_blogs->id',
+    user_id BIGINT UNSIGNED NOT NULL COMMENT 'User id key: kdb_users->id',
+    post_key VARCHAR(64) NOT NULL COMMENT 'Using time base algorithm generated Unique Post Key',
+    title VARCHAR(128) NOT NULL COMMENT 'Post title',
+    content TEXT NOT NULL COMMENT 'Post content',
+    slug VARCHAR(256) NOT NULL COMMENT 'Post slug',
+    reference VARCHAR(256) NOT NULL COMMENT 'Reference URL',
+    thumbnail VARCHAR(256) NOT NULL COMMENT 'Post Thumbnail url',
+    metadesc VARCHAR(256) NOT NULL COMMENT 'Post description',
+    category VARCHAR(64) NOT NULL COMMENT 'Post category',
+    lang VARCHAR(64) NOT NULL COMMENT 'Post Language',
+    tags VARCHAR(128) NOT NULL COMMENT 'Post tags',
+    type VARCHAR(15) NOT NULL DEFAULT 'post' COMMENT 'Which type of post is this. Like Post, Video etc',
+    info VARCHAR(512) NOT NULL COMMENT 'Extra info of this post in json format',
+    status VARCHAR(16) NOT NULL DEFAULT "draft" COMMENT 'Status of post: draft/publish/delete',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Post create time',
+    update_time DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW() COMMENT 'Time when this post details updated',
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE kdb_category (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Unique id',
+    name VARCHAR(64) NOT NULL COMMENT 'Category name',
+    slug VARCHAR(64) NOT NULL COMMENT 'Category slug',
+    parent_id INT UNSIGNED NOT NULL DEFAULT '0' COMMENT 'catgory id for multi level caegory',
+    ctype VARCHAR(12) NOT NULL DEFAULT "user" COMMENT 'Category Type user or system',
+    user_id BIGINT UNSIGNED NOT NULL DEFAULT '0' COMMENT 'User id key: kdb_users->id',
+    PRIMARY KEY (id)
+);
+
+INSERT INTO kdb_category VALUES(NULL, "Education", "education", 0, 'system', 1);
+
+CREATE TABLE kdb_adsize (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Unique id',
+    user_id BIGINT UNSIGNED NOT NULL COMMENT 'User id key: kdb_users->id',
+    name VARCHAR(64) NOT NULL COMMENT 'AdSize name',
+    width INT NOT NULL COMMENT 'Adsize width',
+    height INT NOT NULL COMMENT 'Adsize height',
+    sitekey VARCHAR(64) NOT NULL COMMENT 'AdSize unique key',
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE kdb_adgroup (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Unique id',
+    blog_id BIGINT UNSIGNED NOT NULL COMMENT 'Blog id key: kdb_blogs->id',
+    user_id BIGINT UNSIGNED NOT NULL COMMENT 'User id key: kdb_users->id',
+    name VARCHAR(64) NOT NULL COMMENT 'AdGroup name',
+    platform CHAR(2) NOT NULL DEFAULT 'a' COMMENT 'AdGroup Device Platform',
+    metadesc VARCHAR(512) NOT NULL COMMENT 'AdGroup descriptions',
+    adsize_id INT UNSIGNED NOT NULL COMMENT 'Adsize id key: kdb_adsize->id',
+    ads_count INT UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Number of total ads in this group',
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE kdb_ads (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Unique ads id',
+    blog_id BIGINT UNSIGNED NOT NULL COMMENT 'Blog id key: kdb_blogs->id',
+    user_id BIGINT UNSIGNED NOT NULL COMMENT 'User id key: kdb_users->id',
+    name VARCHAR(128) NOT NULL COMMENT 'Ads Name',
+    position INT NOT NULL DEFAULT 0 COMMENT 'Ads position id Key: kdb_adspos->id',
+    image_url VARCHAR(512) NOT NULL DEFAULT '' COMMENT 'Ads Banner URL',
+    target VARCHAR(512) NOT NULL DEFAULT '' COMMENT 'Ads Target url',
+    status VARCHAR(16) NOT NULL DEFAULT 'pending' COMMENT 'Status of ads: pending/pause/live',
+    active BOOLEAN NOT NULL DEFAULT TRUE COMMENT 'Is this ad active or not?',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'ads create time',
+    expire_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Time when this ads will expire',
+    update_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Time when this ads details updated',
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE kdb_uploads (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Upload Unique id',
+    user_id BIGINT UNSIGNED NOT NULL COMMENT 'Unique userid of user which uplaoded this image',
+    blog_id BIGINT UNSIGNED NOT NULL COMMENT 'Unique website id',
+    name VARCHAR(256) NOT NULL COMMENT 'Image Url Of Banner',
+    privacy CHAR(2) NOT NULL COMMENT 'Image Url Of Banner',
+    tags VARCHAR(256) NOT NULL COMMENT 'Image Url Of Banner',
+    path VARCHAR(256) NOT NULL COMMENT 'Image Url Of Banner',
+    is_image BOOLEAN NOT NULL COMMENT 'Image Url Of Banner',
+    file_type VARCHAR(256) NOT NULL COMMENT 'Image Url Of Banner',
+    file_size INT NOT NULL COMMENT 'Image Url Of Banner',
+    width INT NOT NULL COMMENT 'Image width',
+    height INT NOT NULL COMMENT 'Image height',
+    url VARCHAR(256) NOT NULL COMMENT 'Image Url Of Banner',
+    public_image BOOLEAN NOT NULL DEFAULT TRUE COMMENT 'Is this image is public or only for user who uploaded',
+    upload_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Current date and time when this image uploaded to server',
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE kdb_themes (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Unique id for theme',
+    name VARCHAR(256) DEFAULT '' COMMENT 'name of theme',
+    path VARCHAR(256) DEFAULT '' COMMENT 'path of theme directory',
+    version VARCHAR(15) DEFAULT '1.0.0' COMMENT 'version of theme',
+    menus VARCHAR(512) DEFAULT '' COMMENT 'Array of menu blocks available in theme by device type',
+    tools VARCHAR(512) DEFAULT '' COMMENT 'Array List of tools available in theme by device type',
+    thumbnail VARCHAR(512) DEFAULT '' COMMENT 'Thumbnail image url of this theme',
+    enabled BOOLEAN NOT NULL DEFAULT FALSE COMMENT 'Is this theme publicly available for user.',
+    create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'when this theme first added',
+    update_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Time when this theme updated',
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE kdb_feeder (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Process id',
+    name VARCHAR(64) NOT NULL COMMENT 'Process Name',
+    blog_id BIGINT UNSIGNED NOT NULL COMMENT 'Blog id key: kdb_blogs->id',
+    user_id BIGINT UNSIGNED NOT NULL COMMENT 'User id key: kdb_users->id',
+    category VARCHAR(128) NOT NULL DEFAULT '' COMMENT 'Content Category of this cron',
+    tags VARCHAR(128) NOT NULL DEFAULT '' COMMENT 'Content tags of this cron. Multiple tags allowed seperated by comma(,)',
+    source_url VARCHAR(512) NOT NULL DEFAULT '' COMMENT 'Source url which is used for get content',
+    feed_format VARCHAR(128) NOT NULL DEFAULT 'standard' COMMENT 'Format of Feed available in content',
+    last_post_key VARCHAR(64) NOT NULL COMMENT 'last post key',
+    last_run DATETIME DEFAULT NULL COMMENT 'Process last run time',
+    enabled BOOLEAN NOT NULL DEFAULT TRUE COMMENT 'Is this crontab enabled',
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE kwp_country (
+    id TINYINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Unique Country ID',
+    name varchar(64) NOT NULL COMMENT 'Country Name',
+    iso_two varchar(2) NOT NULL COMMENT 'Country ISO Two',
+    iso_three varchar(3) NOT NULL COMMENT 'Country ISO Three',
+    num_iso INT(5) NOT NULL COMMENT 'Country ISO Number',
+    isd INT(5) NOT NULL COMMENT 'Country ISD',
+    enabled BOOLEAN NOT NULL DEFAULT FALSE COMMENT 'System Enabled in this country',
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE kdb_user_role(
+    id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Unique User Role ID',
+    name VARCHAR (32) NOT NULL DEFAULT '' COMMENT 'Name of User Role',
+    keyname VARCHAR (32) NOT NULL DEFAULT '' COMMENT 'User Role Unique key',
+    PRIMARY KEY (id)
+);
+
+insert into kdb_user_role values (NULL, "Super User", "super_user");
+insert into kdb_user_role values (NULL, "Blogger", "blogger");
+
+CREATE TABLE kdb_access_groups (
+    id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Unique Access Group Unique ID',
+    name VARCHAR (32) NOT NULL DEFAULT '' COMMENT 'Access Group Name',
+	keyname VARCHAR (32) NOT NULL DEFAULT '' COMMENT 'Access Group Unique key',
+    PRIMARY KEY (id)
+);
+
+insert into kdb_access_groups values (NULL, "System"); # 1
+insert into kdb_access_groups values (NULL, "Users"); # 2
+insert into kdb_access_groups values (NULL, "Blogs"); # 3
+
+CREATE TABLE kdb_access(
+    id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'System Access unique ID',
+    group_id SMALLINT UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Related Access Group ID: kdb_access_groups->id',
+    name VARCHAR (32) NOT NULL DEFAULT '' COMMENT 'Access Name',
+    keyname VARCHAR (32) NOT NULL DEFAULT '' COMMENT 'Access Unique Key',
+    description VARCHAR (256) NOT NULL DEFAULT '' COMMENT 'Access short description',
+    PRIMARY KEY (id)
+);
+
+insert into kdb_access values (NULL, 0, "Blog Dashboard", "page_summery", "Home page of blog");
+insert into kdb_access values (NULL, 0, "Blog Posts Feature", "group_posts", "All features related to post in blog");
+insert into kdb_access values (NULL, 0, "View Blog Posts", "page_post_list", "Need to view a list of posts");
+insert into kdb_access values (NULL, 0, "Create Blog Post", "page_post_new", "Create new post");
+insert into kdb_access values (NULL, 0, "Edit Blog Post", "page_post_edit", "Edit any post");
+insert into kdb_access values (NULL, 0, "Blog Videos Feature", "group_videos", "Edit any post");
+insert into kdb_access values (NULL, 0, "View Blog Videos", "page_video_list", "Edit any post");
+insert into kdb_access values (NULL, 0, "Search Videos", "page_video_search", "Edit any post");
+insert into kdb_access values (NULL, 0, "Search Youtube Videos", "video_search_youtube", "Edit any post");
+insert into kdb_access values (NULL, 0, "Search Facebook Videos", "video_search_facebook", "Edit any post");
+insert into kdb_access values (NULL, 0, "Search Vimeo Vidoes", "video_search_vimeo", "Edit any post");
+insert into kdb_access values (NULL, 0, "Create Blog Videos", "page_video_new", "Edit any post");
+insert into kdb_access values (NULL, 0, "Edit Blog Videos", "page_video_edit", "Edit any post");
+insert into kdb_access values (NULL, 0, "View Blogs", "page_blog_grid", "");
+insert into kdb_access values (NULL, 0, "group_pages", "group_pages", "");
+insert into kdb_access values (NULL, 0, "page_list", "page_list", "");
+insert into kdb_access values (NULL, 0, "page_new", "page_new", "");
+insert into kdb_access values (NULL, 0, "page_edit", "page_edit", "");
+insert into kdb_access values (NULL, 0, "group_categories", "group_categories", "");
+insert into kdb_access values (NULL, 0, "page_category_list", "page_category_list", "");
+insert into kdb_access values (NULL, 0, "page_category_new", "page_category_new", "");
+insert into kdb_access values (NULL, 0, "page_category_edit", "page_category_edit", "");
+insert into kdb_access values (NULL, 0, "group_ads", "group_ads", "");
+insert into kdb_access values (NULL, 0, "page_ads_list", "page_ads_list", "");
+insert into kdb_access values (NULL, 0, "page_ads_new", "page_ads_new", "");
+insert into kdb_access values (NULL, 0, "page_ads_edit", "page_ads_edit", "");
+insert into kdb_access values (NULL, 0, "page_adgroup_list", "page_adgroup_list", "");
+insert into kdb_access values (NULL, 0, "page_adgroup_new", "page_adgroup_new", "");
+insert into kdb_access values (NULL, 0, "page_adgroup_edit", "page_adgroup_edit", "");
+insert into kdb_access values (NULL, 0, "group_collection", "group_collection", "");
+insert into kdb_access values (NULL, 0, "page_image_list", "page_image_list", "");
+insert into kdb_access values (NULL, 0, "page_document_list", "page_document_list", "");
+insert into kdb_access values (NULL, 0, "page_upload_image", "page_upload_image", "");
+insert into kdb_access values (NULL, 0, "page_upload_public", "page_upload_public", "");
+insert into kdb_access values (NULL, 0, "group_settings", "group_settings", "");
+insert into kdb_access values (NULL, 0, "page_settings", "page_settings", "");
+insert into kdb_access values (NULL, 0, "page_theme_list", "page_theme_list", "");
+insert into kdb_access values (NULL, 0, "page_theme_new", "page_theme_new", "");
+insert into kdb_access values (NULL, 0, "page_theme_edit", "page_theme_edit", "");
+insert into kdb_access values (NULL, 0, "page_blog_theme", "page_blog_theme", "");
+insert into kdb_access values (NULL, 0, "page_blog_theme_change", "page_blog_theme_change", "");
+insert into kdb_access values (NULL, 0, "page_blog_new", "page_blog_new", "");
+insert into kdb_access values (NULL, 0, "page_blog_edit", "page_blog_edit", "");
+insert into kdb_access values (NULL, 0, "page_adsize_list", "page_adsize_list", "");
+insert into kdb_access values (NULL, 0, "popup_adsize_new", "popup_adsize_new", "");
+insert into kdb_access values (NULL, 0, "popup_adsize_edit", "popup_adsize_edit", "");
+insert into kdb_access values (NULL, 0, "page_user_list", "page_user_list", "");
+insert into kdb_access values (NULL, 0, "page_setting_account", "page_setting_account", "");
+insert into kdb_access values (NULL, 0, "page_setting_passsword", "page_setting_passsword", "");
+
+CREATE TABLE kdb_access_role(
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'System Access Grant Unique ID',
+    access_id SMALLINT UNSIGNED NOT NULL COMMENT 'Access Id: kdb_access->id',
+    role_id SMALLINT UNSIGNED NOT NULL COMMENT 'User Role Id: kdb_user_role->id',
+    enabled BOOLEAN NOT NULL DEFAULT FALSE COMMENT 'Is this access enabled',
+    user_id BIGINT UNSIGNED NOT NULL COMMENT 'Who updated this access. User id key: kdb_users->id',
+    create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'A time when access granted',
+    update_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Time when access updated',
+    PRIMARY KEY (id)
+);
+
+insert into kdb_access_role values (NULL, 1, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 2, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 3, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 4, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 5, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 6, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 7, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 8, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 9, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 10, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 11, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 12, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 13, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 14, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 15, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 16, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 17, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 18, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 19, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 20, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 21, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 22, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 23, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 24, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 25, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 26, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 27, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 28, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 29, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 30, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 31, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 32, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 33, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 34, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 35, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 36, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 37, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 38, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 39, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 40, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 41, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 42, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 43, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 44, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 45, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 46, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 47, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 48, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 49, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 50, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 51, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 52, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 53, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 54, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 55, 2, TRUE, 2, now(),now());
+insert into kdb_access_role values (NULL, 56, 2, TRUE, 2, now(),now());

@@ -1,0 +1,97 @@
+SHOW VARIABLES LIKE '%char%';
+
+INSERT INTO kdb_users VALUES(NULL, "Rahul Siwal", "rahulsiwal62@gmail.com", "rsiwal", "$2a$08$GCCCiFm9Quqh4pu8aw88/uj9N6vc0Su5pwmIWuAk//gCKSq2juTT2", 0, NOW(), NOW());
+
+SELECT * FROM kdb_users;
+
+INSERT INTO kdb_blogs VALUES(NULL, "Sab News Hindi", "hindi.sabnews.in", "rsiwal", "$2a$08$GCCCiFm9Quqh4pu8aw88/uj9N6vc0Su5pwmIWuAk//gCKSq2juTT2", 0, NOW(), NOW());
+
+DROP TABLE kdb_access_token;
+
+DROP TABLE kdb_users;
+
+SELECT * FROM kdb_users;
+
+SELECT * FROM kdb_blogs;
+
+SELECT * FROM kdb_access_token;
+
+TRUNCATE TABLE kdb_users;
+TRUNCATE TABLE kdb_access_token;
+TRUNCATE TABLE kdb_blogs;
+
+SELECT * FROM kdb_posts ORDER BY id DESC;
+
+update kdb_posts set type='page' where id=10;
+
+DESC kdb_posts;
+
+DROP TABLE kdb_posts;
+
+TRUNCATE TABLE kdb_posts;
+
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
+
+SELECT `status`, `gb_post_id` as `pid` FROM `kdb_posts` WHERE `user_id` = '1' AND `blog_id` = '2' AND `id` = '4';
+
+SHOW TABLES;
+
+DESC `kdb_category`;
+
+DROP TABLE kdb_category;
+
+SELECT * FROM kdb_category;	
+INSERT INTO kdb_category VALUES(NULL, "Fashion", "fashion", 0, 'system', 1);
+INSERT INTO kdb_category VALUES(NULL, "Food", "food", 1, 'system', 1);
+
+UPDATE kdb_category SET user_id=2 WHERE id=17;
+	
+
+SELECT a.id, a.name, a.slug, b.name AS parent, a.parent_id AS pid FROM kdb_category AS a LEFT OUTER JOIN kdb_category AS b ON a.parent_id=b.id;
+
+SELECT a.id, a.name, a.slug, b.name AS parent, a.parent_id AS pid FROM kdb_category AS a LEFT OUTER JOIN kdb_category AS b ON a.parent_id = b.id WHERE ( a.user_id = '1' OR a.ctype = 'system' ) ORDER BY a.name LIMIT 100;
+
+
+show create table kdb_posts;
+
+DROP TABLE kdb_blogs;
+
+SELECT * FROM kdb_blogs;	
+TRUNCATE TABLE kdb_blogs;
+
+
+DROP TABLE kdb_adsize;
+SELECT * FROM kdb_adsize;	
+TRUNCATE TABLE kdb_adsize;
+
+DROP TABLE kdb_adgroup;
+SELECT * FROM kdb_adgroup;	
+TRUNCATE TABLE kdb_adgroup;
+
+SELECT a.id, a.name, a.metadesc AS mdesc, CASE a.platform WHEN 'a' THEN 'Anyone' WHEN 'd' THEN 'Desktop' WHEN 't' THEN 'Tablet' WHEN m THEN 'Mobile' END AS device, a.platform AS platform, b.id AS adsid, b.name AS adsize, CONCAT(b.width, ' x ', b.height) AS size, b.sitekey, a.ads_count AS COUNT FROM `kdb_adgroup` AS `a` LEFT OUTER JOIN `kdb_adsize` AS `b` ON `a`.`adsize_id` = `b`.`id` ORDER BY `a`.`name` LIMIT 100;
+
+SELECT * FROM kdb_uploads;
+
+INSERT INTO kdb_uploads (user_id, blog_id, NAME, privacy, tags, PATH, is_image, file_type, file_size, width, height, url, public_image, upload_time ) SELECT user_id, blog_id, NAME, privacy, tags, PATH,is_image,file_type,file_size,width,height,url,public_image,upload_time FROM kdb_uploads;
+
+
+TRUNCATE kdb_uploads;
+
+drop table kdb_configs;
+
+
+SELECT * FROM kdb_blogs;	
+
+SELECT * FROM kdb_posts ORDER BY id DESC;
+select * from kdb_configs;
+
+UPDATE kdb_posts SET slug = 'do-not-delete-config-page', gb_post_id = '8152565423077730323', gb_post_url = '/p/do-not-delete-config-page.html', status = 'publish' WHERE id = 21 AND user_id = '1';
+
+
+select * from kdb_themes;
+insert into kdb_themes values(NULL, "Theme One", "newspot", "1.0.0", "[]", "[]", "https://google.com/logo/png", true, now(), now());
+
+select * from kdb_user_role;
+
+select * from kdb_access_groups;
+

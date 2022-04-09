@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="10px" height="6px" viewBox="0 0 10 6" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.3 (57544) - http://www.bohemiancoding.com/sketch -->
+    <title>icon/arrow</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Top-nav" transform="translate(-1232.000000, -34.000000)" fill="#5A93EA" fill-rule="nonzero">
+            <g id="icon/arrow" transform="translate(1236.857143, 37.142857) rotate(-270.000000) translate(-1236.857143, -37.142857) translate(1233.857143, 32.142857)">
+                <path d="M5.48735193,5.48406095 L1.19610715,9.77517321 C0.923132148,10.0482807 0.480549974,10.0482807 0.207707494,9.77517321 C-0.0651570723,9.50230864 -0.0651570723,9.05974855 0.207707494,8.78690607 L4.00479662,4.98992738 L0.20781793,1.19308121 C-0.0650466366,0.920106209 -0.0650466366,0.477590296 0.20781793,0.20472573 C0.480682496,-0.0682492723 0.923242584,-0.0682492723 1.19621759,0.20472573 L5.48746237,4.49590425 C5.62389465,4.63240279 5.69203349,4.81110987 5.69203349,4.98990529 C5.69203349,5.16878907 5.62376213,5.34762866 5.48735193,5.48406095 Z" id="Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>

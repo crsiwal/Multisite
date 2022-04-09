@@ -1,0 +1,368 @@
+.main-theme{
+	background-color: #ffffff !important;
+}
+.main-bg{
+	background-color: #0069ff !important;	
+}
+.main-bd{
+	border-color: #0069ff !important;
+}
+.main-text{
+	color: #666 !important;
+}
+.main-tw{
+	color: #ffffff !important;
+}
+.main-tmc{
+	color: #0069ff !important;
+}
+.main-htext{
+	color: #999 !important;	
+}
+.main-sbg{
+	background-color: #f4f2d4 !important;
+}
+
+/*** Home Page Css ***/
+.main {
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+}
+.nopad{
+	padding:0px !important;
+}
+._card {
+    border: 1px solid;
+    display: block;
+    clear: both;
+    margin: 0px 5px 10px 5px;
+    border-radius: 5px;
+}
+.cardbody img {
+    display: none;
+}
+.cardimg {
+    width: 100%;
+}
+.cimg {
+    width: 100%;
+    max-height: 250px;
+}
+.cardtitle {
+    font-size: 19px;
+    margin: 12px 0;
+    padding: 0 5px;
+}
+.cardbody {
+    display: none;
+}
+.cardstrip {
+    clear: both;
+    width: 100%;
+    padding: 7px 10px;	
+}
+.read {
+    float: left;
+}
+.share {
+    text-align: right;
+}
+.linker i {
+    font-size: 24px;
+    margin: 0px 7px 0px 0px;
+    vertical-align: bottom;
+}
+.pointer{
+	cursor: pointer;
+}
+.lodmimg {
+    height: 80px;
+}
+.lodmr {
+    text-align: center;
+}
+/** Single Page Css **/
+.hpost {
+    height: 50px;
+    text-align: center;
+    padding: 3px 0;
+}
+.ltitl {
+    font-size: 15px;
+    text-transform: lowercase;
+    color: #163665;
+}
+._single {
+    border-top: 1px solid #e6e6e6;
+    margin: 6px 0;
+    padding: 6px 0;
+}
+._stitle {
+    text-align: center;
+    margin: auto;
+    padding: 0px 10% 5px 10%;
+    font-size: 19px;
+    border-bottom: 1px solid #e6e6e6;
+}
+.rdstitle {
+    text-align: center;
+    margin: 4px 0px;
+}
+._snav {
+    border-top: 1px solid #e6e6e6;
+    border-bottom: 1px solid #e6e6e6;
+    padding: 4px 10px;
+	height: 36px;
+}
+._snav .navl {
+	display: inline-block;
+}
+._snavr {
+    float: right;
+}
+._pcontent {
+    padding: 15px 10px;
+    text-align: left;
+    line-height: 2pc;
+}
+._pcontent a, ._pcontent img {
+    display: none;
+}
+.shrwpic i {
+    font-size: 40px;
+    color: #06a022;
+}
+._wpsm t {
+    font-size: 20px;
+    position: absolute;
+    margin: 4px 0 0 12px;
+}
+.rbtn{
+	border: 1px solid #0069ff;
+    background: transparent;
+    border-radius: 3px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+._wpsm {
+    padding: 6px 5%;
+}
+._join {
+    text-align: center;
+    width: 95%;
+    margin: auto;
+}
+.scntry {
+    margin-bottom: 10px;
+    width: 100%;
+}
+.wpjg {
+    margin-bottom: 10px;
+}
+._wpsm {
+    padding: 6px 5%;
+}
+._wpbtn{
+	text-align: center;
+    width: 100%;
+}
+._sfbjoin {
+    margin-top: 25px;
+}
+.scpagfb {
+    text-align: center;
+    margin-bottom: 11px;
+}
+/** Read more posts **/
+._ndchj {
+    border-bottom: 1px solid #cecece;
+    margin: 4px 0px 1px 0px;
+    font-size: 18px;
+    padding: 6px 10px;
+}
+._srltd{
+    margin: 0;
+    padding: 0;
+}
+._srltd li {
+    margin: 0;
+    border-bottom: 1px solid #d8d6d6;
+    list-style-type: none;
+    padding: 5px 10px 8px 9px;
+}
+._srltd li a {
+    font-size: 13px;
+    color: #000;
+}
+ul.nav.nav-tabs li {
+    width: 50%;
+    border-top: 1px solid #ece3e3;
+    background-color: #dadada;
+}
+.blgl {
+    border-left: 0px solid red !important;
+    font-size: 17px;
+}
+.blgr {
+    border-right: 0px solid red !important;
+    font-size: 17px;
+}
+._rltd {
+    margin-top: 15px;
+}
+.nav-tabs {
+    border-bottom: 0px solid #ddd !important;
+    margin-bottom: 10px;
+}
+.nav-tabs>li>a {
+    margin-right: 0px !important;
+    border: 0px solid transparent;
+    border-radius: 0px !important;
+}
+/*** Footer Css **/
+.playstore img {
+    height: 45px;
+}
+.scsp {
+    margin-top: 8px;
+    padding-left: 15px !important;
+}
+.scsp a i {
+    font-size: 25px;
+}
+.spls {
+    float: right;
+    padding-left: 15px;
+}
+.ftscl {
+    border-bottom: 1px solid #d6d4d4;
+    margin: auto;
+    height: 45px;
+}
+.scsp a {
+    vertical-align: sub;
+}
+.spls {
+    border-left: 1px solid #cecbcb;
+}
+.ftsnv {
+    padding: 0 10px;
+    margin-top: 10px;
+}
+.ftsnv li{
+
+}
+.ftsnv li a {
+    color: #504949;
+    font-size: 12px;
+    text-decoration: underline;	
+}
+/** Whatsapp share **/
+.wpbtnshr i {
+	height: 16px;
+    width: 16px;
+}
+
+.wpshrc{
+	padding-left: 4px;
+    padding-right: 4px;
+}
+.wpbtnshr {
+    font-weight: bold;
+    background: #34af23;
+    color: #fff;
+    font-family: Helvetica, Arial, sans-serif;
+    border-radius: 4px;
+    border: 1px solid #34af23;
+    font-size: 13px;
+    height: 28px;
+    padding: 2px 8px 0px 10px;
+}
+.facebook i {
+    color: #3b5998;
+}
+.youtube i {
+    color: #b31217;
+}
+.twitter i {
+    color: #55acee;
+}
+.instagram i {
+    color: #517fa4;
+}
+
+.copyright {
+    text-align: center;
+    background: #0069ff;
+    color: #ffffff;
+    margin: 13px 0;
+    padding: 4px 3px;
+    font-size: 12px;
+}
+.agrement {
+    padding: 0 12px;
+    text-align: justify;
+}
+
+/* Referral Page */
+th.refap {
+    width: 40%;
+}
+th.refrup {
+    width: 25%;
+}
+tr.reflih th {
+    padding: 6px 5px;
+    text-align: center;
+}
+tr.reflic td {
+    padding: 6px 4px;
+    text-align: center;
+}
+tr.reflif th {
+    padding: 6px 4px;
+    text-align: center;
+}
+.tbldtr{
+	border: 1px solid #c3c3c3;
+}
+img.imgapps {
+    width: 80%;
+}
+
+/***
+** @Override
+** Bootstrap Css
+**/
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+    background-color: #fff;
+    border: 0px solid #ddd;
+}
+
+/** Menu Bar Css **/
+.navn{
+    background: #fff !important;
+    border-color: transparent !important;
+}
+.navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover {
+	background-color: #fff !important;
+}
+.navn .navbar-toggle {
+    border: 0px solid #fff;
+}
+.navc{
+    background: #0069ff;
+    border-color: transparent;	
+}
+.hlpmg {
+    height: 51px;
+}
+.logim {
+    height: 72px;
+    margin-top: -37px;
+}
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover {
+    color: #fff;
+    background-color: #0069ff;
+}
